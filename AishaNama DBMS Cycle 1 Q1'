@@ -1,0 +1,113 @@
+create table Depart(DepartmentID int primary key, DepartmentName varchar(20), ManagerID int, loc varchar(30));
+Query OK, 0 rows affected (0.03 sec)
+
+create table Emp(EmpNo int primary key, name varchar(25), job varchar(20), salary int, hiredate date, commission int, DepartmentNo int, foreign
+key(DepartmentNo) references Depart(DepartmentID));
+Query OK, 0 rows affected (0.03 sec)
+
+insert into Depart values(1,'Sales',101,'New York'),(2,'HR',102,'Chicago'),(3,'IT',103,'San Francisco'),(4,'Finance',104,'Boston'),(5,'Marketing',105,'LA');
+Query OK, 5 rows affected (0.01 sec)
+
+insert into  Emp values(101,'John','Manager', 50000,'1990-01-10', NULL,1),(102,'Jane','HR Executive',20000,'1992-03-15',500,2),(103,'Mike','Developer',30000,'1995-07-20',NULL,3),(104,'Sara','Accountant', 25000,'1998-04-25',1000,4),(105,'Tom','Sales Executive',15000,'1994-11-30',800,1);
+Query OK, 5 rows affected (0.02 sec)
+
+select name,salary from Emp where salary not between 5000 and 35000;
++------+--------+
+| name | salary |
++------+--------+
+| John |  50000 |
++------+--------+
+1 row in set (0.00 sec)
+
+select name,job,hiredate from Emp where hiredate between '1990-02-20' and'1998-05-01' order by hiredate;
++------+-----------------+------------+
+| name | job             | hiredate   |
++------+-----------------+------------+
+| Jane | HR Executive    | 1992-03-15 |
+| Tom  | Sales Executive | 1994-11-30 |
+| Mike | Developer       | 1995-07-20 |
+| Sara | Accountant      | 1998-04-25 |
++------+-----------------+------------+
+4 rows in set (0.00 sec)
+
+select name as Employee, salary as 'Monthly Salary' from Emp where salary between 5000 and 12000 and DepartmentNo in (2,4);
+Empty set (0.00 sec)
+
+select name, hiredate from Emp where year(hiredate) = 1994;
++------+------------+
+| name | hiredate   |
++------+------------+
+| Tom  | 1994-11-30 |
++------+------------+
+1 row in set (0.00 sec)
+
+select name, salary, commission from Emp where commission is not null order by salary desc,commission desc;
++------+--------+------------+
+| name | salary | commission |
++------+--------+------------+
+| Sara |  25000 |       1000 |
+| Jane |  20000 |        500 |
+| Tom  |  15000 |        800 |
++------+--------+------------+
+3 rows in set (0.00 sec)
+
+
+select name from Emp where name like '__a%';
+Empty set (0.00 sec)
+
+select name from Emp where name like '%a%' and name like '%e%';
++------+
+| name |
++------+
+| Jane |
++------+
+1 row in set (0.00 sec)
+
+select name,job,salary from Emp where (job = 'Sales Executive' or job = 'Stock Clerk') and salary not in (20000,4000,7000);
++------+-----------------+--------+
+| name | job             | salary |
++------+-----------------+--------+
+| Tom  | Sales Executive |  15000 |
++------+-----------------+--------+
+1 row in set (0.00 sec)
+
+
+select Emp.name,Emp.DepartmentNo, Depart.DepartmentName from Emp join Depart on Emp.DepartmentNo = Depart.DepartmentID;
++------+--------------+----------------+
+| name | DepartmentNo | DepartmentName |
++------+--------------+----------------+
+| John |            1 | Sales          |
+| Jane |            2 | HR             |
+| Mike |            3 | IT             |
+| Sara |            4 | Finance        |
+| Tom  |            1 | Sales          |
++------+--------------+----------------+
+5 rows in set (0.01 sec)
+
+select EmpNo,name from Emp where DepartmentNo in (select DepartmentNo from Emp where name like '%u%');
+Empty set (0.00 sec)
+
+insert into Emp values(106, 'Amit', 'Stock Clerk',33000, '1994-12-12', 750, 1);
+Query OK, 1 row affected (0.02 sec)
+select name,hiredate from Emp where DepartmentNo = (select DepartmentNo from Emp where name = 'Amit') and Name!='John';
++------+------------+
+| name | hiredate   |
++------+------------+
+| Tom  | 1994-11-30 |
+| Amit | 1994-12-12 |
++------+------------+
+2 rows in set (0.01 sec)
+
+select e1.name, e1.job from Emp e1 left join Depart e2 on e2.ManagerID= e1.EmpNo where e2.ManagerID is null;
+Empty set (0.00 sec)
+
+EXTRA
+select name as Employee, salary as 'Monthly Salary' from Emp where salary between 5000 and 25000 and DepartmentNo in (2,4);
++----------+----------------+
+| Employee | Monthly Salary |
++----------+----------------+
+| Jane     |          20000 |
+| Sara     |          25000 |
++----------+----------------+
+2 rows in set (0.00 sec)
+
