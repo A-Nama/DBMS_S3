@@ -1,0 +1,73 @@
+mysql> create database employeeView;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> use employeeView;
+Database changed
+mysql> create table employee(employee_no int primary key, employee_name varchar(50), job varchar(30), department_no int, salary int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into employee values(1,"Lia", "Manager", 4, 45000),(2,"Yeji", "Lead Manager", 1, 60000),(3,"Chaeryoung", "Marketing Lead", 2,50000),(4,"Ryujin","Product Manager", 4,38000),(5,"Yuna", "Social Media Manager",1,48000);
+Query OK, 5 rows affected (0.02 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select*from employee;
++-------------+---------------+----------------------+---------------+--------+
+| employee_no | employee_name | job                  | department_no | salary |
++-------------+---------------+----------------------+---------------+--------+
+|           1 | Lia           | Manager              |             4 |  45000 |
+|           2 | Yeji          | Lead Manager         |             1 |  60000 |
+|           3 | Chaeryoung    | Marketing Lead       |             2 |  50000 |
+|           4 | Ryujin        | Product Manager      |             4 |  38000 |
+|           5 | Yuna          | Social Media Manager |             1 |  48000 |
++-------------+---------------+----------------------+---------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> create view employeeview as select*from employee;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select* from employeeview;
++-------------+---------------+----------------------+---------------+--------+
+| employee_no | employee_name | job                  | department_no | salary |
++-------------+---------------+----------------------+---------------+--------+
+|           1 | Lia           | Manager              |             4 |  45000 |
+|           2 | Yeji          | Lead Manager         |             1 |  60000 |
+|           3 | Chaeryoung    | Marketing Lead       |             2 |  50000 |
+|           4 | Ryujin        | Product Manager      |             4 |  38000 |
+|           5 | Yuna          | Social Media Manager |             1 |  48000 |
++-------------+---------------+----------------------+---------------+--------+
+5 rows in set (0.01 sec)
+
+mysql> select employee_no,employee_name,department_no, job from employeeview;
++-------------+---------------+---------------+----------------------+
+| employee_no | employee_name | department_no | job                  |
++-------------+---------------+---------------+----------------------+
+|           1 | Lia           |             4 | Manager              |
+|           2 | Yeji          |             1 | Lead Manager         |
+|           3 | Chaeryoung    |             2 | Marketing Lead       |
+|           4 | Ryujin        |             4 | Product Manager      |
+|           5 | Yuna          |             1 | Social Media Manager |
++-------------+---------------+---------------+----------------------+
+5 rows in set (0.00 sec)
+
+mysql> select* from employeeview where job = "Manager";
++-------------+---------------+---------+---------------+--------+
+| employee_no | employee_name | job     | department_no | salary |
++-------------+---------------+---------+---------------+--------+
+|           1 | Lia           | Manager |             4 |  45000 |
++-------------+---------------+---------+---------------+--------+
+1 row in set (0.00 sec)
+
+mysql> update employeeview set department_no = 4 where employee_no = 3;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select* from employee where employee_no = 3;
++-------------+---------------+----------------+---------------+--------+
+| employee_no | employee_name | job            | department_no | salary |
++-------------+---------------+----------------+---------------+--------+
+|           3 | Chaeryoung    | Marketing Lead |             4 |  50000 |
++-------------+---------------+----------------+---------------+--------+
+1 row in set (0.00 sec)
+
+mysql> drop view employeeview;
+Query OK, 0 rows affected (0.02 sec)
