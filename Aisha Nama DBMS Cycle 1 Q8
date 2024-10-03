@@ -1,0 +1,83 @@
+mysql> create database TCL;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use TCL;
+Database changed
+
+mysql> create table employee(employee_id int primary key, employee_name varchar(50), designation varchar(30), department_no int,employee_salary int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into employee values(1,"Lia", "Manager", 4, 45000),(2,"Yeji", "Lead Manager", 1, 60000),(3,"Chaeryoung", "Marketing Lead", 2,50000),(4,"Ryujin","Product Manager", 4,38000),(5,"Yuna", "Social Media Manager",1,48000);
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select*from employee;
++-------------+---------------+----------------------+---------------+-----------------+
+| employee_id | employee_name | designation          | department_no | employee_salary |
++-------------+---------------+----------------------+---------------+-----------------+
+|           1 | Lia           | Manager              |             4 |           45000 |
+|           2 | Yeji          | Lead Manager         |             1 |           60000 |
+|           3 | Chaeryoung    | Marketing Lead       |             2 |           50000 |
+|           4 | Ryujin        | Product Manager      |             4 |           38000 |
+|           5 | Yuna          | Social Media Manager |             1 |           48000 |
++-------------+---------------+----------------------+---------------+-----------------+
+5 rows in set (0.00 sec)
+
+mysql> start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into employee values(6, "Somi", "Sales Lead", 1,55000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select*from employee;
++-------------+---------------+----------------------+---------------+-----------------+
+| employee_id | employee_name | designation          | department_no | employee_salary |
++-------------+---------------+----------------------+---------------+-----------------+
+|           1 | Lia           | Manager              |             4 |           45000 |
+|           2 | Yeji          | Lead Manager         |             1 |           60000 |
+|           3 | Chaeryoung    | Marketing Lead       |             2 |           50000 |
+|           4 | Ryujin        | Product Manager      |             4 |           38000 |
+|           5 | Yuna          | Social Media Manager |             1 |           48000 |
+|           6 | Somi          | Sales Lead           |             1 |           55000 |
++-------------+---------------+----------------------+---------------+-----------------+
+6 rows in set (0.00 sec)
+
+mysql> savepoint S;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into employee values(7, "Rose", "Head Organizer", 5,65000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select*from employee;
++-------------+---------------+----------------------+---------------+-----------------+
+| employee_id | employee_name | designation          | department_no | employee_salary |
++-------------+---------------+----------------------+---------------+-----------------+
+|           1 | Lia           | Manager              |             4 |           45000 |
+|           2 | Yeji          | Lead Manager         |             1 |           60000 |
+|           3 | Chaeryoung    | Marketing Lead       |             2 |           50000 |
+|           4 | Ryujin        | Product Manager      |             4 |           38000 |
+|           5 | Yuna          | Social Media Manager |             1 |           48000 |
+|           6 | Somi          | Sales Lead           |             1 |           55000 |
+|           7 | Rose          | Head Organizer       |             5 |           65000 |
++-------------+---------------+----------------------+---------------+-----------------+
+7 rows in set (0.00 sec)
+
+mysql> rollback to savepoint S;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select*from employee;
++-------------+---------------+----------------------+---------------+-----------------+
+| employee_id | employee_name | designation          | department_no | employee_salary |
++-------------+---------------+----------------------+---------------+-----------------+
+|           1 | Lia           | Manager              |             4 |           45000 |
+|           2 | Yeji          | Lead Manager         |             1 |           60000 |
+|           3 | Chaeryoung    | Marketing Lead       |             2 |           50000 |
+|           4 | Ryujin        | Product Manager      |             4 |           38000 |
+|           5 | Yuna          | Social Media Manager |             1 |           48000 |
+|           6 | Somi          | Sales Lead           |             1 |           55000 |
++-------------+---------------+----------------------+---------------+-----------------+
+6 rows in set (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
